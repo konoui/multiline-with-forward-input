@@ -1,0 +1,21 @@
+version: "3.4"
+services:
+  app:
+    build:
+      context: ./app/
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async-connect: "true"
+    container_name: app
+  logrouter:
+    environment:
+      FLB_LOG_LEVEL: debug
+    ports:
+      - "24224:24224"      
+    build:
+      context: ./fluent-bit/
+    logging:
+      driver: json-file
+    container_name: logrouter
